@@ -1,10 +1,9 @@
-package org.scholanova.mealdeliverapi.domain.ItemNourriture;
+package org.scholanova.mealdeliverapi.domain.Element;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "nourriture")
-public class ItemNourriture {
+public class Element {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +19,7 @@ public class ItemNourriture {
     private int tempsPreparation;
 
     @Enumerated(EnumType.STRING)
-    private TypeNourriture type;
-
-    public ItemNourriture() {
-    }
+    private TypeElement type;
 
     public Long getId() { return id; }
 
@@ -41,13 +37,13 @@ public class ItemNourriture {
         return tempsPreparation;
     }
 
-    public TypeNourriture getType() {
+    public TypeElement getType() {
         return type;
     }
 
     @Override
     public String toString() {
-        return "ItemNourriture{" +
+        return "ELement{" +
                 "id=" + id +
                 ", prix=" + prix +
                 ", nom='" + nom + '\'' +

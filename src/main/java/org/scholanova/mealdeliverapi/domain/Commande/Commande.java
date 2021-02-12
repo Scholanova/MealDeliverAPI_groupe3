@@ -1,7 +1,7 @@
 package org.scholanova.mealdeliverapi.domain.Commande;
 
 import org.scholanova.mealdeliverapi.domain.Client;
-import org.scholanova.mealdeliverapi.domain.ItemNourriture.ItemNourriture;
+import org.scholanova.mealdeliverapi.domain.Element.Element;
 import org.scholanova.mealdeliverapi.domain.Restaurant.Restaurant;
 
 import javax.persistence.*;
@@ -22,7 +22,7 @@ public class Commande {
     private Restaurant restaurant;
 
     @OneToMany
-    private List<ItemNourriture> contenu;
+    private List<Element> contenu;
 
     @Column
     private Date heureLivraison;
@@ -61,11 +61,11 @@ public class Commande {
         this.restaurant = restaurant;
     }
 
-    public List<ItemNourriture> getContenu() {
+    public List<Element> getContenu() {
         return contenu;
     }
 
-    public void setContenu(List<ItemNourriture> contenu) {
+    public void setContenu(List<Element> contenu) {
         this.contenu = contenu;
     }
 

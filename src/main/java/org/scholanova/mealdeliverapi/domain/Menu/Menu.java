@@ -1,8 +1,7 @@
 package org.scholanova.mealdeliverapi.domain.Menu;
 
-import org.scholanova.mealdeliverapi.domain.Boisson;
-import org.scholanova.mealdeliverapi.domain.ItemNourriture.ItemNourriture;
-import org.scholanova.mealdeliverapi.domain.ItemNourriture.TypeNourriture;
+import org.scholanova.mealdeliverapi.domain.Element.Element;
+import org.scholanova.mealdeliverapi.domain.Element.TypeElement;
 import org.scholanova.mealdeliverapi.domain.Menu.Exception.MenuMauvaisTypeException;
 
 import javax.persistence.*;
@@ -15,49 +14,49 @@ public class Menu {
     private Long id;
 
     @ManyToOne
-    private ItemNourriture entree;
+    private Element entree;
 
     @ManyToOne
-    private ItemNourriture plat;
+    private Element plat;
 
     @ManyToOne
-    private ItemNourriture dessert;
+    private Element dessert;
 
     @ManyToOne
-    private Boisson boisson;
+    private Element boisson;
 
     public Long getId() {
         return id;
     }
 
-    public ItemNourriture getEntree() {
+    public Element getEntree() {
         return entree;
     }
 
-    public ItemNourriture getPlat() {
+    public Element getPlat() {
         return plat;
     }
 
-    public ItemNourriture getDessert() {
+    public Element getDessert() {
         return dessert;
     }
 
-    public Boisson getBoisson() {
+    public Element getBoisson() {
         return boisson;
     }
 
-    public ItemNourriture verifType(TypeNourriture typeAttendu, ItemNourriture nourriture) {
-        if( typeAttendu != nourriture.getType()){
-            throw new MenuMauvaisTypeException(nourriture.getNom() + " n'est pas un(e) " + typeAttendu);
+    public Element verifType(TypeElement typeAttendu, Element element) {
+        if( typeAttendu != element.getType()){
+            throw new MenuMauvaisTypeException(element.getNom() + " n'est pas un(e) " + typeAttendu);
         }
-        return nourriture;
+        return element;
     }
 
-    public Menu(ItemNourriture entree, ItemNourriture plat, ItemNourriture dessert, Boisson boisson){
-            this.entree = verifType(TypeNourriture.ENTREE, entree);
-            this.plat = verifType(TypeNourriture.PLAT, plat);
-            this.dessert = verifType(TypeNourriture.DESSERT, dessert);
-            this.boisson = boisson;
+    public Menu(Element entree, Element plat, Element dessert, Element boisson){
+            this.entree = verifType(TypeElement.ENTREE, entree);
+            this.plat = verifType(TypeElement.PLAT, plat);
+            this.dessert = verifType(TypeElement.DESSERT, dessert);
+            this.boisson = verifType(TypeElement.BOISSON, boisson);
     }
 
     @Override
