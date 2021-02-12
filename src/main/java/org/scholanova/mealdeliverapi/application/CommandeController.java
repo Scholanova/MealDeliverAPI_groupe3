@@ -1,28 +1,24 @@
 package org.scholanova.mealdeliverapi.application;
 
-import org.scholanova.mealdeliverapi.domain.Client;
 import org.scholanova.mealdeliverapi.domain.Commande.Commande;
 import org.scholanova.mealdeliverapi.domain.Commande.EtatCommande;
 import org.scholanova.mealdeliverapi.domain.ItemNourriture.ItemNourriture;
-import org.scholanova.mealdeliverapi.domain.Restaurant;
 import org.scholanova.mealdeliverapi.infrastructure.Client.ClientRepository;
 import org.scholanova.mealdeliverapi.infrastructure.Commande.CommandeRepository;
 import org.scholanova.mealdeliverapi.infrastructure.Plat.repository.NourritureRepository;
 import org.scholanova.mealdeliverapi.infrastructure.Restaurant.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class CommandeController {
@@ -92,6 +88,46 @@ public class CommandeController {
             }
         }
         commandeRepository.save(commande);
+    }
+
+
+    @GetMapping("/commandes/delete/{id_commande}")
+    public void deleteCommande(@PathVariable("id_commande") Long id_commande) {
+        commandeRepository.findById(id_commande).ifPresent(commande -> commandeRepository.delete(commande));
+    }
+
+    @GetMapping("/commandes/{id_commande}/modifyCouvert/{couvert}")
+    public void addCouvert(@PathVariable("id_commande") Long id_commande, @PathVariable("couvert") Boolean couvert) {
+        commandeRepository.findById(id_commande).ifPresent(commande -> {
+            commande.setCouvertPlastique(couvert);
+            commandeRepository.save(commande);
+        });
+    }
+
+    @GetMapping("/commandes/{id_commande}/removePlat/{id_nourriture}")
+    public void addCouvert(@PathVariable("id_commande") Long id_commande, @PathVariable("id_nourriture") Long id_nourriture) {
+        commandeRepository.findById(id_commande).ifPresent(commande -> {
+            commande.getContenu().forEach(plat -> {
+                if (plat.getId().equals(id_nourriture)) {
+                    commande.getContenu().remove(plat);
+                    commandeRepository.save(commande);
+                }});
+        });
+    }
+
+
+    @GetMapping("/commandes/clear:{minutes}")
+    public void deleteCommandeAfterNminutes(@PathVariable("int") int minutes) {
+
+
+        Iterable<Commande> lesCommandes = commandeRepository.findAll();
+        lesCommandes.forEach(cmd -> {
+
+            LocalDateTime heure = LocalDateTime.ofInstant(cmd.getHeureLivraison().toInstant(),null);
+
+            if (heure.plusMinutes(minutes).toLocalDate().isAfter(LocalDateTime.now().toLocalDate())) {
+                commandeRepository.delete(cmd);
+            }});
     }
 
     public Boolean isNull(Object object) {
