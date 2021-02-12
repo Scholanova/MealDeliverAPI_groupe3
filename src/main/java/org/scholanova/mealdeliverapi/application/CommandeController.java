@@ -93,7 +93,11 @@ public class CommandeController {
 
     @GetMapping("/commandes/delete/{id_commande}")
     public void deleteCommande(@PathVariable("id_commande") Long id_commande) {
-        commandeRepository.findById(id_commande).ifPresent(commande -> commandeRepository.delete(commande));
+        commandeRepository.findById(id_commande).ifPresent(commande -> {
+            commande.get
+            commandeRepository.delete(commande);
+        });
+
     }
 
     @GetMapping("/commandes/{id_commande}/modifyCouvert/{couvert}")
